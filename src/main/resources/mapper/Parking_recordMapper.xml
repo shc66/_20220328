@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zb.mapper.Parking_recordMapper">
+    <insert id="add" parameterType="com.zb.pojo.Parking_record">
+            insert into parking_record(car_num,brand,region_id,status,add_time)
+            values (#{car_num},#{brand},#{region_id},0,#{add_time})
+    </insert>
+    <update id="update" parameterType="com.zb.pojo.Parking_record">
+            update parking_record set status=1 where id=#{id}
+    </update>
+    <update id="updateCar" parameterType="com.zb.pojo.Parking_record">
+            update parking_record set car_num=#{car_num},brand=#{brand},region_id=#{region_id},add_time=#{add_time}
+             where id=#{id}
+    </update>
+    <delete id="delete" parameterType="Integer">
+            delete from parking_record where id=#{id}
+    </delete>
+
+    <select id="getAll" resultType="com.zb.pojo.Parking_record">
+          select * from parking_record as p
+        inner join Region as r
+        on p.region_id=r.id
+          <where>
+                <if test="region_id!=null and region_id!=-1">
+                    region_id=#{region_id}
+                </if>
+          </where>
+          order by add_time desc
+          limit #{form},#{pageSize}
+    </select>
+    <select id="getCount" resultType="java.lang.Integer">
+        select count(*) from parking_record
+        <where>
+            <if test="region_id!=null and region_id!=-1">
+                region_id=#{region_id}
+            </if>
+        </where>
+    </select>
+    <select id="getById" resultType="com.zb.pojo.Parking_record">
+        select * from parking_record where id=#{id}
+    </select>
+</mapper>
